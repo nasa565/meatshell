@@ -5,8 +5,8 @@ All notable changes are documented here. 本文件记录所有重要变更。
 
 ## [Unreleased]
 
-- **远端 GPU 实时监控。** 已连接的 Linux 服务器若安装了 NVIDIA 驱动，侧栏会新增一行 GPU：进度条显示所有显卡中最高的利用率，右侧显示显存总用量，多卡时追加 `×N`。系统信息窗口新增 GPU 状态表，逐卡显示型号、利用率、显存和显存占用。没有 NVIDIA 工具或查询失败时整块自动隐藏，不影响 CPU / 内存监控；`nvidia-smi` 连续无输出时停止调用，不会在无可用驱动的主机上反复占用资源。
-- **Live remote GPU monitoring.** For a connected Linux server with NVIDIA drivers, the sidebar gains a GPU row: the bar shows the highest utilization across cards, the label shows total VRAM, and multi-GPU servers append `×N`. The system-info window gains a GPU status table with per-card name, utilization, VRAM and VRAM usage. Without NVIDIA tooling, or when the query fails, the row hides itself and CPU/memory monitoring is unaffected; repeated empty `nvidia-smi` output stops the query instead of respawning it on hosts with no usable driver.
+- **远端 GPU 实时监控。** 已连接的 Linux 服务器若安装了 NVIDIA 驱动，侧栏会新增一行 GPU：进度条显示所有显卡中最高的利用率，右侧显示显存总用量，多卡时追加 `×N`。系统信息窗口新增 GPU 状态表，逐卡显示型号、利用率、显存和显存占用。没有 NVIDIA 工具或查询失败时整块自动隐藏，不影响 CPU / 内存监控；`nvidia-smi` 连续无输出时停止调用，不会在无可用驱动的主机上反复占用资源，但 60 秒后会自动重试，驱动升级或模块重载恢复后 GPU 行会自己回来。兼容 NVIDIA 容器镜像和精简系统：会从 `/usr/local/nvidia/bin` 等路径查找工具，缺少 `timeout` 时也能采样。
+- **Live remote GPU monitoring.** For a connected Linux server with NVIDIA drivers, the sidebar gains a GPU row: the bar shows the highest utilization across cards, the label shows total VRAM, and multi-GPU servers append `×N`. The system-info window gains a GPU status table with per-card name, utilization, VRAM and VRAM usage. Without NVIDIA tooling, or when the query fails, the row hides itself and CPU/memory monitoring is unaffected; repeated empty `nvidia-smi` output stops the query instead of respawning it on hosts with no usable driver, but a retry runs automatically after 60 seconds so the row returns once a driver upgrade or module reload finishes. NVIDIA container images and minimal systems are supported: the tool is looked up in paths such as `/usr/local/nvidia/bin`, and sampling still works without `timeout`.
 
 ## [0.8.5] - 2026-11-25
 
